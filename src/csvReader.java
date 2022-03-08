@@ -10,6 +10,7 @@ public class csvReader {
     private final File file;
     private Scanner sc;
     private final ArrayList<String> overskrifter = new ArrayList<>();
+    private String splitVar = ";";
 
 
     public csvReader(String filePath) {
@@ -23,8 +24,9 @@ public class csvReader {
     }
 
     private void fillTitles() {
+        overskrifter.clear();
         String currLine = sc.nextLine();
-        String[] split = currLine.split(";");
+        String[] split = currLine.split(this.splitVar);
         overskrifter.addAll(Arrays.asList(split));
     }
 
@@ -54,7 +56,7 @@ public class csvReader {
     }
 
     public void createDDL(String path){
-        String fileName = path + "/" + "DDL" + ".SQL";
+        String fileName = path + "/" + getFilename() + " - DDL" + ".SQL";
         File newFile = new File(fileName);
         try {
             FileWriter fr = new FileWriter(newFile);
@@ -68,7 +70,7 @@ public class csvReader {
     }
 
     public void createDML(String path){
-        String fileName = path + "/" + "DML" + ".SQL";
+        String fileName = path + "/" + getFilename() + " - DML" + ".SQL";
         File newFile = new File(fileName);
 
         try {
@@ -77,7 +79,7 @@ public class csvReader {
             fr.write("INSERT INTO " + getFilename());
             while(sc.hasNext()){
                 String currLine = sc.nextLine();
-                String[] split = currLine.split(";");
+                String[] split = currLine.split(this.splitVar);
                 String data = "";
                 for (String value : split) {
                     if(split[0].matches(value))
@@ -94,5 +96,11 @@ public class csvReader {
         }
     }
 
+    public void setSplitVar(String splitVar) {
+        this.splitVar = splitVar;
+    }
 
+    public String getSplitVar() {
+        return splitVar;
+    }
 }
